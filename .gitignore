@@ -28,6 +28,7 @@ mvnw.cmd
 # === IDE / Editor ===
 .vscode/
 .idea/
+.idea/runConfigurations/
 *.iml
 
 # === OS generated files ===
