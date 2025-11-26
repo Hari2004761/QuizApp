@@ -161,54 +161,6 @@ body {
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
-
-/* === Divider + Social Buttons === */
-.divider {
-    margin: 2rem 0;
-    position: relative;
-    text-align: center;
-}
-
-.divider::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: #d1d5db;
-}
-
-.divider-text {
-    background: white;
-    padding: 0 1rem;
-    color: #6b7280;
-    font-size: 0.875rem;
-    position: relative;
-    top: -10px;
-}
-
-.social-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-}
-
-.social-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    border: 2px solid #d1d5db;
-    border-radius: 0.5rem;
-    background: white;
-    color: #6b7280;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
 .social-button:hover {
     background: #f9fafb;
     transform: translateY(-1px);
@@ -220,7 +172,7 @@ body {
     border-radius: 0.5rem;
     padding: 0.25rem;
     font-size: 1rem;
-    min-height: 3rem; /* Match your input height */
+    min-height: 3rem;
     box-sizing: border-box;
 }
 
@@ -230,7 +182,33 @@ body {
 }
 
 .react-select__menu {
-    z-index: 100; /* ensures dropdown appears above everything */
+    z-index: 100;
+}
+/* react-select match the input fields for select country */
+.react-select__control {
+    width: 110%;
+    min-height: 3rem;
+    border: 2px solid #d1d5db !important;
+    border-radius: 0.5rem !important;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+.react-select__control--is-focused {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.react-select__value-container {
+    padding: 0.25rem 0.75rem !important;
+}
+
+.react-select__input {
+    font-size: 1rem !important;
+}
+
+.react-select__menu {
+    z-index: 100;
 }
 
 

@@ -35,13 +35,6 @@ const AuthPage = () => {
 
                     {isLogin ? <LoginForm /> : <SignupForm />}
 
-                    <div className="divider">
-                        <span className="divider-text">Or continue with</span>
-                    </div>
-                    <div className="social-buttons">
-                        <button className="social-button">Google</button>
-                        <button className="social-button">Facebook</button>
-                    </div>
                 </div>
             </div>
         </div>

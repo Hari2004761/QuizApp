@@ -1,15 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const LoginForm = () => {
-    const handleLogin = (e) => {
+    const [message, setMessage] = useState("");
+
+    const handleLogin = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const email = formData.get('email');
-        const password = formData.get('password');
-        alert(`Demo login for ${email}`);
-        e.target.reset();
-    };
+        const email = formData.get("email");
+        const password = formData.get("password");
 
+        try {
+            // Call backend login API
+            const res = await axios.post("http://localhost:8080/api/auth/login", {
+                email,
+                password
+            });
+
+            setMessage(res.data.message); // show backend response
+            if (res.data.status === "success") {
+                e.target.reset();
+
+            }
+        } catch (err) {
+            console.error(err);
+            setMessage("❌ Login failed. Try again.");
+        }
+    };
     return (
         <div className="form-container">
             <h2 className="form-title">Welcome Back!</h2>
@@ -25,6 +42,11 @@ const LoginForm = () => {
                 </div>
                 <button type="submit" className="primary-button">Sign In</button>
             </form>
+            {message && (
+                <p className={`message ${message.includes('❌') ? 'error' : 'success'}`}>
+                    {message}
+                </p>
+            )}
         </div>
     );
 };
