@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Quiz - Learn & Quiz</title>
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+<div class="app">
+
+  <header class="top-bar">
+    <div class="top-left">
+      <div class="logo-icon">📚</div>
+      <div class="welcome-title">Create a Quiz Question</div>
+    </div>
+    <div class="top-right">
+      <a th:href="@{/}" class="btn-secondary">Back to Dashboard</a>
+    </div>
+  </header>
+
+  <main class="content" style="grid-template-columns: minmax(0, 1fr);">
+    <section class="section-block">
+      <div class="subject-card">
+        <form th:action="@{/quiz/new}" method="post" class="quiz-form">
+          <div class="form-group">
+            <label>Subject (quiz name)</label>
+            <input type="text" name="subject" list="subject-list"
+                   placeholder="e.g. Data Structures" required>
+            <datalist id="subject-list">
+              <option th:each="s : ${existingSubjects}" th:value="${s}">s</option>
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label>Category</label>
+            <input type="text" name="category" list="category-list"
+                   placeholder="e.g. Programming, Business, Humanities">
+            <datalist id="category-list">
+              <option th:each="c : ${existingCategories}" th:value="${c}">c</option>
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label>Question</label>
+            <textarea name="question" rows="3" placeholder="Type your question here" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Options</label>
+            <input type="text" name="option1" placeholder="Option 1" required>
+            <input type="text" name="option2" placeholder="Option 2" required>
+            <input type="text" name="option3" placeholder="Option 3" required>
+            <input type="text" name="option4" placeholder="Option 4" required>
+          </div>
+
+          <div class="form-group">
+            <label>Correct option (1–4)</label>
+            <input type="number" name="correctOption" min="1" max="4" value="1" required>
+          </div>
+
+          <button type="submit" class="btn-primary">Save and start quiz</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

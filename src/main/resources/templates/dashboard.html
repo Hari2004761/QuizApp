@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+<div class="app">
+
+    <!-- Top bar -->
+    <header class="top-bar">
+        <div class="top-left">
+            <div class="logo-icon">📚</div>
+            <div class="welcome">
+                <div class="welcome-title">
+                    Welcome back, <span th:text="${userName}">Hari</span>!
+                </div>
+            </div>
+        </div>
+        <div class="top-right">
+            <div class="icon-btn">✉️</div>
+            <div class="icon-btn">🔔</div>
+            <div class="profile">
+                <div class="profile-name" th:text="${fullName}">Hari Narayanan</div>
+                <a th:href="@{/profile}" class="profile-avatar">🐱</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <section class="main-left">
+
+            <!-- Quick stats row -->
+            <section class="section-block">
+                <h2>Quick stats</h2>
+                <p class="section-subtitle">Overview of your learning activity.</p>
+
+                <div class="card-row">
+                    <div class="subject-card small-card">
+                        <div class="subject-title">Total Quizzes</div>
+                        <div class="subject-line">
+                            <span th:text="${totalQuizzes}">0</span>
+                        </div>
+                    </div>
+
+                    <div class="subject-card small-card">
+                        <div class="subject-title">Total Questions</div>
+                        <div class="subject-line">
+                            <span th:text="${totalQuestions}">0</span>
+                        </div>
+                    </div>
+
+                    <div class="subject-card small-card">
+                        <div class="subject-title">Attempts</div>
+                        <div class="subject-line">
+                            <span th:text="${totalAttempts}">0</span>
+                        </div>
+                    </div>
+
+                    <div class="subject-card small-card">
+                        <div class="subject-title">Best Score</div>
+                        <div class="subject-line">
+                            <span th:text="${bestScorePercent} + '%'">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quizzes + filters -->
+            <section class="section-block">
+                <div class="section-header">
+                    <div>
+                        <h2>Your Quizzes</h2>
+                        <p class="section-subtitle">
+                            Choose a quiz and start practicing. Filter by category or create your own.
+                        </p>
+                    </div>
+                    <a th:href="@{/quiz/new}" class="btn-primary">
+                        + Create Quiz
+                    </a>
+                </div>
+
+                <!-- Category filter chips -->
+                <div class="filter-row">
+                    <a th:href="@{/}" th:classappend="${activeCategory} == 'All' ? ' chip active' : ' chip'">
+                        All
+                    </a>
+                    <a th:each="cat : ${categories}"
+                       th:href="@{|/?category=${cat}|}"
+                       th:text="${cat}"
+                       th:classappend="${cat} == ${activeCategory} ? ' chip active' : ' chip'">
+                        Category
+                    </a>
+                </div>
+
+                <div class="card-row">
+                    <div class="quiz-card" th:each="q : ${quizSummaries}">
+                        <div class="subject-title" th:text="${q.subjectName}">Subject Name</div>
+                        <div class="subject-line">
+                            <span class="label">Questions:</span>
+                            <span th:text="${q.total}">3</span>
+                        </div>
+
+                        <div class="quiz-dots">
+                            <div th:each="i : ${#numbers.sequence(1, q.total)}"
+                                 th:classappend="'quiz-dot done'"
+                                 th:text="${i}">1</div>
+                        </div>
+
+                        <a class="btn-primary"
+                           th:href="@{'/quiz/' + ${q.subjectName}}">
+                            Take a Quiz
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent results -->
+            <section class="section-block">
+                <h2>Recent results</h2>
+                <p class="section-subtitle">Your latest quiz attempts.</p>
+
+                <div class="card-row" th:if="${#lists.isEmpty(recentResults)}">
+                    <div class="subject-card small-card">
+                        <div class="subject-line">No attempts yet. Take a quiz to see your results here.</div>
+                    </div>
+                </div>
+
+                <div class="card-row" th:if="${!#lists.isEmpty(recentResults)}">
+                    <div class="subject-card small-card" th:each="r : ${recentResults}">
+                        <div class="subject-title" th:text="${r.subjectName}">Subject</div>
+                        <div class="subject-line">
+                            <span class="label">Score:</span>
+                            <span th:text="${r.score} + '/' + ${r.total} + ' (' + ${r.percentage} + '%)'">0/0</span>
+                        </div>
+                        <div class="subject-line">
+                            <span class="label">When:</span>
+                            <span th:text="${#temporals.format(r.completedAt, 'dd MMM yyyy HH:mm')}">date</span>
+                        </div>
+                        <a class="btn-secondary" th:href="@{'/quiz/' + ${r.subjectName}}">
+                            Try again
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+
+        <!-- Right side progress card -->
+        <aside class="sidebar">
+            <div class="progress-card">
+                <h2>Your Progress</h2>
+
+                <div class="progress-circle">
+                    <div class="progress-inner">
+                        <span th:text="${overallProgress} + '%'">34%</span>
+                    </div>
+                </div>
+
+                <p class="progress-text">
+                    Keep going! Every quiz makes you a bit better.
+                </p>
+
+                <a class="btn-primary full-width" th:href="@{/quiz/new}">
+                    Add a new quiz
+                </a>
+            </div>
+        </aside>
+    </main>
+</div>
+</body>
+</html>
