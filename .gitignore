@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Node project artifacts
+frontend/node_modules/
+node_modules/
+*.log
+npm-debug.log*
+yarn-error.log
