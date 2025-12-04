@@ -10,7 +10,7 @@ const countries = getData().map(country => ({
 
 const SignupForm = () => {
     const [selectedCountry, setSelectedCountry] = useState(null);
-    const [message, setMessage] = useState("");
+    const [message, setMessage] = useState('');
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -26,22 +26,22 @@ const SignupForm = () => {
         };
 
         if (!selectedCountry) {
-            setMessage("Please select your country!");
+            setMessage('❌ Please select your country!');
             return;
         }
 
         if (user.password !== user.confirmPassword) {
-            setMessage("Passwords do not match!");
+            setMessage('❌ Passwords do not match!');
             return;
         }
 
         try {
-            const res = await axios.post("http://localhost:8080/api/auth/signup", user);
-            setMessage(res.data);  //
+            const res = await axios.post('http://localhost:8080/api/auth/signup', user);
+            setMessage(res.data);
             e.target.reset();
             setSelectedCountry(null);
         } catch (err) {
-            setMessage("Signup failed. Try again.");
+            setMessage('Signup failed. Try again.');
         }
     };
 
@@ -52,7 +52,7 @@ const SignupForm = () => {
                 <input type="text" name="firstName" placeholder="First Name" className="form-input" required />
                 <input type="text" name="lastName" placeholder="Last Name" className="form-input" required />
                 <input type="email" name="email" placeholder="Email" className="form-input" required />
-                <input type="text" name="username" placeholder="Username" className="form-input" required/>
+                <input type="text" name="username" placeholder="Username" className="form-input" required />
                 <input type="password" name="password" placeholder="Password" className="form-input" required />
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" className="form-input" required />
 
@@ -67,7 +67,11 @@ const SignupForm = () => {
                 <button type="submit" className="primary-button">Sign Up</button>
             </form>
 
-            {message && <p className="form-message">{message}</p>} {}
+            {message && (
+                <p className={`message ${message.startsWith('✅') ? 'success' : 'error'}`}>
+                    {message}
+                </p>
+            )}
         </div>
     );
 };
