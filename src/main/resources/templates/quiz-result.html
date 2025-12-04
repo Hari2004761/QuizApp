@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Results - ' + ${subjectName}">Quiz Results</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+<div class="app">
+
+    <header class="top-bar">
+        <div class="top-left">
+            <div class="logo-icon">📚</div>
+            <div class="welcome-title" th:text="'Results for ' + ${subjectName}">Results</div>
+        </div>
+        <div class="top-right">
+            <a th:href="@{/}" class="btn-secondary">Back to Dashboard</a>
+        </div>
+    </header>
+
+    <main class="content" style="grid-template-columns: minmax(0, 1fr);">
+        <section class="section-block">
+            <h2>Your score</h2>
+            <p class="section-subtitle">
+                You answered
+                <span th:text="${score}">0</span>
+                out of
+                <span th:text="${total}">0</span>
+                questions correctly.
+            </p>
+
+            <div class="card-row summary-row">
+                <div class="subject-card small-card">
+                    <div class="subject-title">Percentage</div>
+                    <div class="subject-line"
+                         th:text="${total == 0} ? '0%' : (${score} * 100 / ${total}) + '%'">0%
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 20px; margin-bottom: 10px;">Question review</h3>
+
+            <div th:each="qr, stat : ${questionResults}" class="subject-card"
+                 th:classappend="${qr.correct} ? ' result-correct' : ' result-wrong'">
+                <div class="subject-title"
+                     th:text="${stat.index + 1} + '. ' + ${qr.question.text}">
+                    Question text
+                </div>
+                <p class="subject-line">
+                    <span class="label">Your answer:</span>
+                    <span th:text="${qr.chosenIndex != null ? qr.question.options[qr.chosenIndex] : 'Not answered'}">
+        Your answer
+    </span>
+                </p>
+
+                <p class="subject-line">
+                    <span class="label">Correct answer:</span>
+                    <span th:text="${qr.question.options[qr.question.correctIndex]}">Correct</span>
+                </p>
+
+
+                <p class="subject-line" th:if="${qr.correct}">
+                    ✅ Correct
+                </p>
+                <p class="subject-line" th:if="${!qr.correct}">
+                    ❌ Incorrect
+                </p>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a th:href="@{'/quiz/' + ${subjectName}}" class="btn-primary" style="margin-right: 8px;">
+                    Try again
+                </a>
+                <a th:href="@{/}" class="btn-secondary">
+                    Back to Dashboard
+                </a>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

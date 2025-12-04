@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Quiz - ' + ${subjectName}">Quiz</title>
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+<div class="app">
+
+  <header class="top-bar">
+    <div class="top-left">
+      <div class="logo-icon">📚</div>
+      <div class="welcome-title" th:text="'Quiz: ' + ${subjectName}">Quiz</div>
+    </div>
+    <div class="top-right">
+      <a th:href="@{/}" class="btn-secondary">Back to Dashboard</a>
+    </div>
+  </header>
+
+  <main class="content" style="grid-template-columns: minmax(0, 1fr);">
+    <section class="section-block">
+      <div class="quiz-header">
+        <h2 th:text="'Answer the questions for ' + ${subjectName}"></h2>
+        <div class="timer">
+          Time left:
+          <span id="timeLeft" th:text="${totalTimeSeconds} + 's'">60s</span>
+        </div>
+      </div>
+      <p class="section-subtitle">Each question has four options. You have about 30 seconds per question.</p>
+
+      <form th:action="@{'/quiz/' + ${subjectName}}" method="post" id="quizForm">
+        <div th:each="q, stat : ${questions}" class="subject-card" style="margin-bottom: 16px;">
+          <div class="subject-title"
+               th:text="${stat.index + 1} + '. ' + ${q.text}">
+            Question text
+          </div>
+
+          <div class="quiz-dots quiz-options-column">
+            <label th:each="opt, optStat : ${q.options}"
+                   style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="radio"
+                     th:name="${'q' + q.id}"
+                     th:value="${optStat.index}"/>
+              <span th:text="${opt}">Option</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Submit Quiz</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<!-- Timer script -->
+<script th:inline="javascript">
+  document.addEventListener('DOMContentLoaded', function () {
+    var totalSeconds = [[${totalTimeSeconds}]];
+    var remaining = totalSeconds;
+    var display = document.getElementById('timeLeft');
+    var form = document.getElementById('quizForm');
+
+    function updateDisplay() {
+      var m = Math.floor(remaining / 60);
+      var s = remaining % 60;
+      if (m > 0) {
+        display.textContent = m + 'm ' + s + 's';
+      } else {
+        display.textContent = s + 's';
+      }
+    }
+
+    updateDisplay();
+
+    var interval = setInterval(function () {
+      remaining--;
+      if (remaining <= 0) {
+        display.textContent = '0s';
+        clearInterval(interval);
+        form.submit();
+      } else {
+        updateDisplay();
+      }
+    }, 1000);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile - Learn & Quiz</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+<div class="app">
+
+    <header class="top-bar">
+        <div class="top-left">
+            <div class="logo-icon">📚</div>
+            <div class="welcome-title">Profile</div>
+        </div>
+        <div class="top-right">
+            <!-- FIX: correct mapping -->
+            <a th:href="@{/}" class="btn-primary">Back to Dashboard</a>
+        </div>
+    </header>
+
+    <main class="content" style="grid-template-columns: minmax(0, 1fr);">
+        <section class="section-block">
+            <div class="profile-card">
+                <h2 th:text="${fullName}">Hari Narayanan</h2>
+                <p class="profile-username" th:text="'@' + ${username}">@hari_n</p>
+                <p class="profile-email" th:text="${email}">hari@example.com</p>
+
+                <div class="profile-extra">
+                    <div>
+                        <span class="label">Country:</span>
+                        <span th:text="${country}">Hungary</span>
+                    </div>
+                    <div>
+                        <span class="label">Study goal:</span>
+                        <span th:text="${studyGoal}"></span>
+                    </div>
+                </div>
+
+                <p class="profile-bio" th:text="${bio}">
+                    Bio goes here...
+                </p>
+
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="label">Quizzes:</span>
+                        <span th:text="${totalQuizzes}">0</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="label">Questions:</span>
+                        <span th:text="${totalQuestions}">0</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="label">Attempts:</span>
+                        <span th:text="${totalAttempts}">0</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="label">Avg score:</span>
+                        <span th:text="${avgScorePercent} + '%'">0%</span>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <a th:href="@{/quiz/new}" class="btn-primary">Create new quiz</a>
+                    <a th:href="@{/}" class="btn-secondary">Go to dashboard</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>
