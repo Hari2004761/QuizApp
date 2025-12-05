@@ -6,7 +6,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './auth/AuthContext';
 import './App.css';
 
-const App = () => {
+
+
+/*const App = () => {
     const { isAuthenticated } = useAuth();
 
     return (
@@ -28,5 +30,18 @@ const App = () => {
         </Routes>
     );
 };
+*/
+
+
+
+
+import Intro from './components/Intro';
+
+
+const App = () => {
+    return <Intro />;
+};
+
+
 
 export default App;
