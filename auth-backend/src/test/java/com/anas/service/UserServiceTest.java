@@ -1,7 +1,7 @@
-package com.example.service;
+package com.anas.service;
 
-import com.example.model.User;
-import com.example.repository.UserRepository;
+import com.anas.model.User;
+import com.anas.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,7 +1,7 @@
-package com.example.controller;
+package com.anas.controller;
 
-import com.example.model.User;
-import com.example.service.UserService;
+import com.anas.model.User;
+import com.anas.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

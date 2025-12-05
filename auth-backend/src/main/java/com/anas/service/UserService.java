@@ -1,7 +1,7 @@
-package com.example.service;
+package com.anas.service;
 
-import com.example.repository.UserRepository;
-import com.example.model.User;
+import com.anas.repository.UserRepository;
+import com.anas.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

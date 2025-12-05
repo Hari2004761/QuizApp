@@ -1,6 +1,6 @@
-package com.example.repository;
+package com.anas.repository;
 
-import com.example.model.User;
+import com.anas.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

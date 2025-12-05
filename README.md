@@ -15,12 +15,21 @@ Java, Spring Boot, React, SQL Server, H2, Maven
 
 📁 Project Structure
 
-QuizApp/ │ ├── auth-backend/ → Spring Boot Login/Signup API (SQL Server)
-│ └── src/main/java/com/example/QuizAppApplication.java │ ├──
-quiz-backend/ → Spring Boot Dashboard + Quiz API (H2) │ └──
-src/main/java/com/hari/quizappdashboard/QuizAppDashboardApplication.java
-│ ├── frontend/ → React application (port 3000) │ └── pom.xml
+```
+QuizApp/
+│
+├── auth-backend/              # Spring Boot Login/Signup API (SQL Server)
+│   └── src/main/java/com/example/QuizAppApplication.java
+│
+├── quiz-backend/              # Spring Boot Dashboard + Quiz API (H2)
+│   └── src/main/java/com/hari/quizappdashboard/QuizAppDashboardApplication.java
+│
+├── frontend/                  # React application (port 3000)
+│
+├── pom.xml                    # Root Maven configuration
 └── README.md
+```
+
 
 🚀 How to Run the Project
 
