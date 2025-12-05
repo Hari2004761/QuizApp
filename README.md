@@ -51,11 +51,11 @@ H2 Console: http://localhost:8081/h2-console
 
 Run: auth-backend/src/main/java/com/example/QuizAppApplication.java
 
-Required environment variables:
+### Required environment variables
 
 DB_HOST=localhost
 DB_PORT=1433
-DB_NAME=UserLoginDB
+DB_NAME=user_data_quizApp
 DB_USERNAME=yourUsername
 DB_PASSWORD=yourPassword
 
