@@ -33,7 +33,7 @@ const DashboardPage = () => {
                         <p className="muted">
                             Your progress, recent attempts, and new practice questions are all in one place.
                         </p>
-                        <a className="primary-button" href="http://localhost:8080/" target="_blank" rel="noreferrer">
+                        <a className="primary-button" href="http://localhost:8081/" target="_blank" rel="noreferrer">
                             Open quiz dashboard
                         </a>
                     </div>
@@ -53,7 +53,7 @@ const DashboardPage = () => {
                     <div className="card">
                         <div className="card-title">Need to start fresh?</div>
                         <p className="muted">If you signed up recently, your new quizzes will appear in the dashboard tab.</p>
-                        <a className="link" href="http://localhost:8080/quiz/new" target="_blank" rel="noreferrer">
+                        <a className="link" href="http://localhost:8081/quiz/new" target="_blank" rel="noreferrer">
                             Add a new quiz now
                         </a>
                     </div>
