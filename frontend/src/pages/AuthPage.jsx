@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 import LoginForm from '../components/LoginForm';
 import SignupForm from '../components/SignupForm';
+import { useLocation } from "react-router-dom";
 
 const AuthPage = () => {
-    const [isLogin, setIsLogin] = useState(true);
+
+
+    const location = useLocation();
+
+    // Check what state was given, depending on te button
+    const initialMode = location.state?.showSignup ? false : true;
+
+
+    const [isLogin, setIsLogin] = useState(initialMode);
 
     return (
         <div className="container">

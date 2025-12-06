@@ -3,23 +3,29 @@
 
 
 import './Intro.css';
+import { useNavigate } from "react-router-dom";
 
 const Intro = () => {
     
 
+
+    const navigate = useNavigate();
+
+
     return(
 
 
-        <body>
+        <div className = "intro-page">
 
     <header>
         <ul>
-            <li>About us</li>
-            <li>What we offer</li>
-            <li>Topics</li>
-            <li>For teachers</li>
-            <li>Sign in</li>
-            <li>Register</li>
+            <li><button>About us</button></li>
+            <li><button>What we offer</button></li>
+            <li><button>Topics</button></li>
+            <li><button>For teachers</button></li>
+            
+
+            <li><button onClick={() => navigate("/auth" , { state: { showSignup: false } })}>Login</button></li>
         </ul>
     </header>
 
@@ -33,7 +39,8 @@ const Intro = () => {
             You can even create your own quizzes to study more effectively or share with classmates. Learn at your own pace,
             test your knowledge, and make studying easier and more enjoyable with QuizMe!
         </p>
-        <button>
+        <button classNmae="start-btn"
+        onClick={() => navigate("/auth" , { state: { showSignup: true } })}>
             <p>Start Now!</p>
         </button>
 
@@ -74,7 +81,7 @@ const Intro = () => {
 
 
     </footer>
-</body>
+</div>
 
 
 

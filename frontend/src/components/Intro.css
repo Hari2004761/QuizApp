@@ -41,13 +41,37 @@ li{
     font-family: "Noto Sans", sans-serif;
     font-size: 20px;
     
-    padding: 10px;
     border-radius: 15px;
+    
+    
     transition: background-color 0.3s ease;
 
 }
 
 li:hover{
+
+    background-color: yellow;
+    color: black;
+    cursor: pointer;
+
+
+}
+
+header button{
+
+    
+    font-family: "Noto Sans", sans-serif;
+    font-size: 20px;
+    background-color: #2f2f2f;
+    
+    padding: 10px;
+    border-radius: 15px;
+    border: none;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+header button:hover {
 
     background-color: yellow;
     color: black;
@@ -82,7 +106,7 @@ main p{
     margin: 0px 40px 0px 40px;
 }
 
-main button{
+main button {
 
     border: none;
     font-family: "Noto Sans", sans-serif;
@@ -94,7 +118,7 @@ main button{
     
 }
 
-main button:hover{
+main button:hover {
 
     border: white solid 1px;
     background-color: #383838;
