@@ -7,5 +7,9 @@ import java.util.List;
 
 public interface QuizResultRepository extends JpaRepository<QuizResultEntity, Long> {
 
-    List<QuizResultEntity> findTop5ByOrderByCompletedAtDesc();
+    List<QuizResultEntity> findTop5ByUserEmailOrderByCompletedAtDesc(String userEmail);
+    List<QuizResultEntity> findByUserEmail(String userEmail);
+    List<QuizResultEntity> findByUserEmailOrderByCompletedAtDesc(String userEmail);
+    List<QuizResultEntity> findByUserEmailIgnoreCase(String userEmail);
+    List<QuizResultEntity> findByUserEmailIgnoreCaseOrderByCompletedAtDesc(String userEmail);
 }

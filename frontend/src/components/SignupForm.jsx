@@ -19,7 +19,7 @@ const SignupForm = () => {
             username: formData.get('username'),
             firstName: formData.get('firstName'),
             lastName: formData.get('lastName'),
-            email: formData.get('email'),
+            email: formData.get('email').trim().toLowerCase(),
             password: formData.get('password'),
             confirmPassword: formData.get('confirmPassword'),
             country: selectedCountry?.label

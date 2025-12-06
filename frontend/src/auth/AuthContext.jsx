@@ -3,22 +3,30 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [userEmail, setUserEmail] = useState(() => localStorage.getItem('quizapp:user') || '');
+    const [user, setUser] = useState(() => {
+        const stored = localStorage.getItem('quizapp:user');
+        return stored ? JSON.parse(stored) : null;
+    });
 
     useEffect(() => {
-        if (userEmail) {
-            localStorage.setItem('quizapp:user', userEmail);
+        if (user) {
+            localStorage.setItem('quizapp:user', JSON.stringify(user));
         } else {
             localStorage.removeItem('quizapp:user');
         }
-    }, [userEmail]);
+    }, [user]);
 
     const value = useMemo(() => ({
-        userEmail,
-        isAuthenticated: Boolean(userEmail),
-        login: (email) => setUserEmail(email),
-        logout: () => setUserEmail('')
-    }), [userEmail]);
+        user,
+        userEmail: user?.email || '',
+        firstName: user?.firstName || '',
+        lastName: user?.lastName || '',
+        username: user?.username || '',
+        country: user?.country || '',
+        isAuthenticated: Boolean(user?.email),
+        login: (userData) => setUser(userData),
+        logout: () => setUser(null)
+    }), [user]);
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

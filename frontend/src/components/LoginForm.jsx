@@ -12,7 +12,7 @@ const LoginForm = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const email = formData.get('email');
+        const email = formData.get('email').trim().toLowerCase();
         const password = formData.get('password');
 
         try {
@@ -21,9 +21,16 @@ const LoginForm = () => {
                 password
             });
 
-            setMessage(res.data.message);
-            if (res.data.status === 'success') {
-                login(email);
+            const { status, message: serverMessage, firstName, lastName, username, country } = res.data;
+            setMessage(serverMessage);
+            if (status === 'success') {
+                login({
+                    email,
+                    firstName,
+                    lastName,
+                    username,
+                    country
+                });
                 const redirectPath = location.state?.from?.pathname || '/dashboard';
                 navigate(redirectPath, { replace: true });
                 e.target.reset();

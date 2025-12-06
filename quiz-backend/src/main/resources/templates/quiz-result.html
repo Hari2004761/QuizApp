@@ -14,7 +14,7 @@
             <div class="welcome-title" th:text="'Results for ' + ${subjectName}">Results</div>
         </div>
         <div class="top-right">
-            <a th:href="@{/}" class="btn-secondary">Back to Dashboard</a>
+            <a th:href="@{'/?userEmail=' + ${userEmail}}" class="btn-secondary">Back to Dashboard</a>
         </div>
     </header>
 
@@ -68,10 +68,10 @@
             </div>
 
             <div style="margin-top: 20px;">
-                <a th:href="@{'/quiz/' + ${subjectName}}" class="btn-primary" style="margin-right: 8px;">
+                <a th:href="@{'/quiz/' + ${subjectName} + '?userEmail=' + ${userEmail}}" class="btn-primary" style="margin-right: 8px;">
                     Try again
                 </a>
-                <a th:href="@{/}" class="btn-secondary">
+                <a th:href="@{'/?userEmail=' + ${userEmail}}" class="btn-secondary">
                     Back to Dashboard
                 </a>
             </div>

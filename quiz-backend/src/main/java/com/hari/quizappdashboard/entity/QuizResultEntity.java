@@ -13,6 +13,7 @@ public class QuizResultEntity {
     private Long id;
 
     private String subjectName;
+    private String userEmail;
     private int score;
     private int total;
     private LocalDateTime completedAt;
@@ -20,8 +21,9 @@ public class QuizResultEntity {
     public QuizResultEntity() {
     }
 
-    public QuizResultEntity(String subjectName, int score, int total, LocalDateTime completedAt) {
+    public QuizResultEntity(String subjectName, String userEmail, int score, int total, LocalDateTime completedAt) {
         this.subjectName = subjectName;
+        this.userEmail = userEmail;
         this.score = score;
         this.total = total;
         this.completedAt = completedAt;
@@ -33,6 +35,10 @@ public class QuizResultEntity {
 
     public String getSubjectName() {
         return subjectName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
     }
 
     public int getScore() {

@@ -15,7 +15,7 @@
         </div>
         <div class="top-right">
             <!-- FIX: correct mapping -->
-            <a th:href="@{/}" class="btn-primary">Back to Dashboard</a>
+            <a th:href="@{'/?userEmail=' + ${userEmail}}" class="btn-primary">Back to Dashboard</a>
         </div>
     </header>
 
@@ -61,8 +61,8 @@
                 </div>
 
                 <div class="profile-actions">
-                    <a th:href="@{/quiz/new}" class="btn-primary">Create new quiz</a>
-                    <a th:href="@{/}" class="btn-secondary">Go to dashboard</a>
+                    <a th:href="@{'/quiz/new?userEmail=' + ${userEmail}}" class="btn-primary">Create new quiz</a>
+                    <a th:href="@{'/?userEmail=' + ${userEmail}}" class="btn-secondary">Go to dashboard</a>
                 </div>
             </div>
         </section>

@@ -14,7 +14,7 @@
       <div class="welcome-title" th:text="'Quiz: ' + ${subjectName}">Quiz</div>
     </div>
     <div class="top-right">
-      <a th:href="@{/}" class="btn-secondary">Back to Dashboard</a>
+      <a th:href="@{'/?userEmail=' + ${userEmail}}" class="btn-secondary">Back to Dashboard</a>
     </div>
   </header>
 
@@ -29,7 +29,8 @@
       </div>
       <p class="section-subtitle">Each question has four options. You have about 30 seconds per question.</p>
 
-      <form th:action="@{'/quiz/' + ${subjectName}}" method="post" id="quizForm">
+      <form th:action="@{'/quiz/' + ${subjectName} + '?userEmail=' + ${userEmail}}" method="post" id="quizForm">
+        <input type="hidden" name="userEmail" th:value="${userEmail}" />
         <div th:each="q, stat : ${questions}" class="subject-card" style="margin-bottom: 16px;">
           <div class="subject-title"
                th:text="${stat.index + 1} + '. ' + ${q.text}">

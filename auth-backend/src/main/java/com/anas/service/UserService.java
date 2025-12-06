@@ -1,7 +1,7 @@
 package com.anas.service;
 
-import com.anas.repository.UserRepository;
 import com.anas.model.User;
+import com.anas.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +19,14 @@ public class UserService {
             return "Email already exists";
         }
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            return "‚ùå Username already taken!";
+            return "É?O Username already taken!";
         }
         if (!user.getPassword().equals(user.getConfirmPassword())) {
-            return "‚ùå Passwords do not match!";
+            return "É?O Passwords do not match!";
         }
         user.setConfirmPassword(null);
         userRepository.save(user);
-        return "‚úÖ User registered successfully!";
+        return "Éo. User registered successfully!";
     }
 
     public Map<String, String> loginUser(String email, String password) {
@@ -35,19 +35,23 @@ public class UserService {
 
         if (optionalUser.isEmpty()) {
             response.put("status", "error");
-            response.put("message", "‚ùå User not found!");
+            response.put("message", "É?O User not found!");
             return response;
         }
 
         User user = optionalUser.get();
         if (user.getPassword().equals(password)) {
             response.put("status", "success");
-            response.put("message", "‚úÖ Login successful!");
+            response.put("message", "Éo. Login successful!");
+            response.put("firstName", user.getFirstName());
+            response.put("lastName", user.getLastName());
+            response.put("username", user.getUsername());
+            response.put("country", user.getCountry());
+            response.put("email", user.getEmail());
         } else {
             response.put("status", "error");
-            response.put("message", "‚ùå Incorrect password!");
+            response.put("message", "É?O Incorrect password!");
         }
         return response;
     }
-
 }

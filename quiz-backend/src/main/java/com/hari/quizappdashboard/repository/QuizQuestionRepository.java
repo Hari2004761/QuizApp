@@ -8,4 +8,5 @@ import java.util.List;
 public interface QuizQuestionRepository extends JpaRepository<QuizQuestionEntity, Long> {
 
     List<QuizQuestionEntity> findBySubjectName(String subjectName);
+    boolean existsByQuestionText(String questionText);
 }
