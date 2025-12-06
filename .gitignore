@@ -21,6 +21,14 @@ HELP.md
 *.ipr
 *.iws
 
+# Ignore H2 / database files
+*.mv.db
+*.trace.db
+
+quiz-backend/data/
+data/
+
+
 ############################
 # VSCode
 ############################
