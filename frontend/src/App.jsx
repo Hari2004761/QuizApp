@@ -5,7 +5,7 @@ import DashboardPage from './pages/DashboardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './auth/AuthContext';
 
-import Intro from './components/Intro';
+import Intro from './pages/Intro';
 import './App.css';
 
 

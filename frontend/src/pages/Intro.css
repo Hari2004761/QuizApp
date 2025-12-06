@@ -15,7 +15,7 @@ header{
     
     background-color: #2f2f2f;
     margin: 30px 10% 30px 10%;
-    padding: none;
+    padding: 0;
     border-radius: 50px;
     display: flex;
     justify-content: center;
@@ -107,25 +107,17 @@ main p{
 }
 
 main button {
-
     border: none;
     font-family: "Noto Sans", sans-serif;
     background-color: yellow;
-    border: solid 1px transparent;
     margin: 35px;
     padding: 10px;
     border-radius: 15px;
-    
 }
 
 main button:hover {
-
-    border: white solid 1px;
+    border: 1px solid white;
     background-color: #383838;
-    margin: 35px;
-    padding: 10px;
-    border-radius: 15px;
-    
 }
 
 

@@ -3,7 +3,7 @@
 
 
 
-import './Intro.css';
+import  './Intro.css';
 import { useNavigate } from "react-router-dom";
 
 const Intro = () => {
@@ -40,7 +40,7 @@ const Intro = () => {
             You can even create your own quizzes to study more effectively or share with classmates. Learn at your own pace,
             test your knowledge, and make studying easier and more enjoyable with QuizMe!
         </p>
-        <button classNmae="start-btn"
+        <button className="start-btn"
         onClick={() => navigate("/auth" , { state: { showSignup: true } })}>
             <p>Start Now!</p>
         </button>

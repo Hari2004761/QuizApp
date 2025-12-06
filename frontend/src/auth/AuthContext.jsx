@@ -3,7 +3,9 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [userEmail, setUserEmail] = useState(() => localStorage.getItem('quizapp:user') || '');
+    const [userEmail, setUserEmail] = useState(() =>
+        localStorage.getItem('quizapp:user') || ''
+    );
 
     useEffect(() => {
         if (userEmail) {
@@ -17,7 +19,10 @@ export const AuthProvider = ({ children }) => {
         userEmail,
         isAuthenticated: Boolean(userEmail),
         login: (email) => setUserEmail(email),
-        logout: () => setUserEmail('')
+        logout: () => {
+            setUserEmail('');
+            localStorage.removeItem('quizapp:user');
+        }
     }), [userEmail]);
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

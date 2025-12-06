@@ -9,7 +9,7 @@ const DashboardPage = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/auth', { replace: true });
+        navigate('/intro', { replace: true, state: { fromLogout: true } });
     };
 
     return (
@@ -33,9 +33,16 @@ const DashboardPage = () => {
                         <p className="muted">
                             Your progress, recent attempts, and new practice questions are all in one place.
                         </p>
-                        <a className="primary-button" href="http://localhost:8081/" target="_blank" rel="noreferrer">
-                            Open quiz dashboard
-                        </a>
+                        <div className="dashboard-button-wrapper">
+                            <a
+                                className="primary-button dashboard-button"
+                                href="http://localhost:8081/"
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                Open quiz dashboard
+                            </a>
+                        </div>
                     </div>
                     <FaChartLine size={72} className="accent-icon" />
                 </section>

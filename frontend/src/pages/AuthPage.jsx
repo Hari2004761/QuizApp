@@ -8,10 +8,8 @@ const AuthPage = () => {
 
     const location = useLocation();
 
-    // Check what state was given, depending on te button
-    const initialMode = location.state?.showSignup ? false : true;
-
-
+    // Check what state was given, depending on the button
+    const initialMode = location.state?.showSignup === true ? false : true;
     const [isLogin, setIsLogin] = useState(initialMode);
 
     return (
