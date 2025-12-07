@@ -19,32 +19,30 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository; // We mock the DB so we don't touch real data
+    private UserRepository userRepository;
 
     @InjectMocks
-    private UserService userService; // We inject the mock into the real service
+    private UserService userService;
 
     // --- TEST REGISTRATION ---
 
     @Test
     void testRegisterUser_Success() {
-        // 1. Setup
         User newUser = new User();
         newUser.setEmail("test@test.com");
         newUser.setUsername("testuser");
         newUser.setPassword("password123");
         newUser.setConfirmPassword("password123");
 
-        // When the DB is checked, return empty (meaning user doesn't exist yet)
+        // Simulate that user does NOT exist yet
         when(userRepository.findByEmail(newUser.getEmail())).thenReturn(Optional.empty());
         when(userRepository.findByUsername(newUser.getUsername())).thenReturn(Optional.empty());
 
-        // 2. Execute
         String result = userService.registerUser(newUser);
 
-        // 3. Verify
-        assertEquals("✅ User registered successfully!", result);
-        verify(userRepository, times(1)).save(any(User.class)); // Make sure save was called
+        // Note: I copied the specific emoji string from your code to match exactly
+        assertEquals("Success: User registered successfully!", result);
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
@@ -52,13 +50,12 @@ public class UserServiceTest {
         User user = new User();
         user.setEmail("existing@test.com");
 
-        // Simulate that email already exists in DB
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
         String result = userService.registerUser(user);
 
         assertEquals("Email already exists", result);
-        verify(userRepository, never()).save(any(User.class)); // Ensure we NEVER saved
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
@@ -74,7 +71,7 @@ public class UserServiceTest {
 
         String result = userService.registerUser(user);
 
-        assertEquals("❌ Passwords do not match!", result);
+        assertEquals("Error: Passwords do not match!", result);
     }
 
     // --- TEST LOGIN ---
@@ -87,27 +84,28 @@ public class UserServiceTest {
         User mockUser = new User();
         mockUser.setEmail(email);
         mockUser.setPassword(password);
+        mockUser.setFirstName("John"); // Added these because your new login returns them
+        mockUser.setLastName("Doe");
 
-        // Simulate finding the user
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
 
         Map<String, String> response = userService.loginUser(email, password);
 
         assertEquals("success", response.get("status"));
-        assertEquals("✅ Login successful!", response.get("message"));
+        assertEquals("Success: Login successful!", response.get("message"));
+        assertEquals("John", response.get("firstName")); // Verified extra data
     }
 
     @Test
     void testLogin_UserNotFound() {
         String email = "ghost@test.com";
 
-        // Simulate user NOT found
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
         Map<String, String> response = userService.loginUser(email, "anyPass");
 
         assertEquals("error", response.get("status"));
-        assertEquals("❌ User not found!", response.get("message"));
+        assertEquals("Error: User not found!", response.get("message"));
     }
 
     @Test
@@ -122,10 +120,9 @@ public class UserServiceTest {
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
 
-        // Try logging in with WRONG password
         Map<String, String> response = userService.loginUser(email, wrongPass);
 
         assertEquals("error", response.get("status"));
-        assertEquals("❌ Incorrect password!", response.get("message"));
+        assertEquals("Error: Incorrect password!", response.get("message"));
     }
 }
