@@ -95,8 +95,8 @@ const DashboardPage = () => {
             <main className="dashboard-main">
                 <section className="dashboard-hero">
                     <div>
-                        <p className="eyebrow">Welcome back</p>
-                        <h2>Stay on track, {displayName}</h2>
+                        <p className="eyebrow">Welcome back, {displayName}</p>
+                        <h2>Stay on track with your quizzes</h2>
                         <p className="muted">
                             Your progress and history stay in sync. Jump back into your quizzes or create a new one.
                         </p>
@@ -124,7 +124,7 @@ const DashboardPage = () => {
                         <div
                             className="progress-circle"
                             style={{
-                                background: `conic-gradient(#ffda23 0deg ${stats.progressDegrees}deg, rgba(255,255,255,0.12) ${stats.progressDegrees}deg 360deg)`
+                                background: `conic-gradient(#2563eb 0deg ${stats.progressDegrees}deg, rgba(255,255,255,0.12) ${stats.progressDegrees}deg 360deg)`
                             }}
                         >
                             <div className="progress-inner">

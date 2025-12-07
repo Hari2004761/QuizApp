@@ -43,7 +43,7 @@ public class QuizApiController {
                 .distinct()
                 .count();
 
-        List<QuizResultEntity> results = resultRepo.findByUserEmailIgnoreCaseOrderByCompletedAtDesc(normalizedEmail);
+        List<QuizResultEntity> results = findResultsForUser(normalizedEmail);
         long totalAttempts = results.size();
 
         int bestScorePercent = results.stream()
@@ -98,7 +98,25 @@ public class QuizApiController {
     ) {}
 
     private String normalizeEmail(String email) {
-        return email == null ? null : email.trim().toLowerCase();
+        if (email == null) return null;
+        String cleaned = email.split(",")[0].trim();
+        if (cleaned.isBlank()) return null;
+        return cleaned.toLowerCase();
+    }
+
+    private List<QuizResultEntity> findResultsForUser(String normalizedEmail) {
+        if (normalizedEmail == null) return List.of();
+        return resultRepo.findAll().stream()
+                .filter(r -> normalizedEmail.equals(normalizeEmail(r.getUserEmail())))
+                .sorted((a, b) -> {
+                    LocalDateTime ca = a.getCompletedAt();
+                    LocalDateTime cb = b.getCompletedAt();
+                    if (ca == null && cb == null) return 0;
+                    if (ca == null) return 1;
+                    if (cb == null) return -1;
+                    return cb.compareTo(ca);
+                })
+                .collect(Collectors.toList());
     }
 
     public record ResultSummary(

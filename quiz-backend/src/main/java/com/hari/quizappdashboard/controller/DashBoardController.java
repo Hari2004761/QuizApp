@@ -63,6 +63,23 @@ public class DashBoardController {
         String countryOrUnknown() {
             return (country == null || country.isBlank()) ? "Unknown" : country;
         }
+
+        String initials() {
+            StringBuilder sb = new StringBuilder();
+            if (firstName != null && !firstName.isBlank()) {
+                sb.append(Character.toUpperCase(firstName.trim().charAt(0)));
+            }
+            if (lastName != null && !lastName.isBlank()) {
+                sb.append(Character.toUpperCase(lastName.trim().charAt(0)));
+            }
+            if (sb.length() == 0 && username != null && !username.isBlank()) {
+                sb.append(Character.toUpperCase(username.trim().charAt(0)));
+            }
+            if (sb.length() == 0 && email != null && !email.isBlank()) {
+                sb.append(Character.toUpperCase(email.trim().charAt(0)));
+            }
+            return sb.length() == 0 ? "U" : sb.toString();
+        }
     }
 
     private Map<String, List<QuizQuestion>> buildQuizBank() {
@@ -111,8 +128,8 @@ public class DashBoardController {
                                            String lastNameParam,
                                            String usernameParam,
                                            String countryParam) {
-        String email = firstNonBlank(userEmailParam, (String) session.getAttribute("userEmail"), "anonymous");
-        email = normalizeEmail(email);
+        String email = normalizeEmail(firstNonBlank(userEmailParam, (String) session.getAttribute("userEmail"), "anonymous"));
+        if (email == null) email = "anonymous";
         String first = firstNonBlank(firstNameParam, (String) session.getAttribute("firstName"));
         String last = firstNonBlank(lastNameParam, (String) session.getAttribute("lastName"));
         String username = firstNonBlank(usernameParam, (String) session.getAttribute("username"));
@@ -128,14 +145,31 @@ public class DashBoardController {
     }
 
     private String resolveUserEmail(HttpSession session, String userEmailParam) {
-        String email = firstNonBlank(userEmailParam, (String) session.getAttribute("userEmail"), "anonymous");
-        email = normalizeEmail(email);
+        String email = normalizeEmail(firstNonBlank(userEmailParam, (String) session.getAttribute("userEmail"), "anonymous"));
+        if (email == null) email = "anonymous";
         session.setAttribute("userEmail", email);
         return email;
     }
 
     private String normalizeEmail(String email) {
-        return email == null ? null : email.trim().toLowerCase();
+        if (email == null) return null;
+        String cleaned = email.split(",")[0].trim();
+        if (cleaned.isBlank()) return null;
+        return cleaned.toLowerCase();
+    }
+
+    private List<QuizResultEntity> findResultsForUser(String email) {
+        String normalized = normalizeEmail(email);
+        if (normalized == null) return List.of();
+
+        Comparator<QuizResultEntity> byCompletedAtDesc = Comparator
+                .comparing(QuizResultEntity::getCompletedAt, Comparator.nullsLast(Comparator.naturalOrder()))
+                .reversed();
+
+        return resultRepo.findAll().stream()
+                .filter(r -> normalized.equals(normalizeEmail(r.getUserEmail())))
+                .sorted(byCompletedAtDesc)
+                .collect(Collectors.toList());
     }
 
     // ===== DASHBOARD =====
@@ -175,7 +209,7 @@ public class DashBoardController {
         long totalQuestions = questionRepo.count();
         int totalQuizzes = quizBank.size();
 
-        List<QuizResultEntity> allResults = resultRepo.findByUserEmailIgnoreCase(userEmail);
+        List<QuizResultEntity> allResults = findResultsForUser(userEmail);
         long totalAttempts = allResults.size();
 
         int bestScorePercent = allResults.stream()
@@ -193,8 +227,8 @@ public class DashBoardController {
         int overallProgress = avgScorePercent;
         int progressDegrees = Math.max(0, Math.min(360, (int) Math.round(overallProgress * 3.6)));
 
-        List<QuizResultEntity> recentResults = resultRepo.findByUserEmailIgnoreCaseOrderByCompletedAtDesc(userEmail);
-        List<QuizResultEntity> history = resultRepo.findByUserEmailIgnoreCaseOrderByCompletedAtDesc(userEmail);
+        List<QuizResultEntity> recentResults = allResults;
+        List<QuizResultEntity> history = allResults;
 
         model.addAttribute("userName", userCtx.displayName());
         model.addAttribute("fullName", userCtx.fullNameOrFallback());
@@ -202,6 +236,7 @@ public class DashBoardController {
         model.addAttribute("quizSummaries", quizSummaries);
         model.addAttribute("overallProgress", overallProgress);
         model.addAttribute("progressDegrees", progressDegrees);
+        model.addAttribute("userInitials", userCtx.initials());
 
         model.addAttribute("categories", categories);
         model.addAttribute("activeCategory",
@@ -232,7 +267,7 @@ public class DashBoardController {
         UserContext userCtx = resolveUserContext(session, userEmailParam, firstNameParam, lastNameParam, usernameParam, countryParam);
         String userEmail = userCtx.email;
 
-        List<QuizResultEntity> allResults = resultRepo.findByUserEmailIgnoreCase(userEmail);
+        List<QuizResultEntity> allResults = findResultsForUser(userEmail);
 
         long totalQuestions = questionRepo.count();
         int totalQuizzes = (int) buildQuizBank().size();
@@ -259,6 +294,7 @@ public class DashBoardController {
         model.addAttribute("totalAttempts", totalAttempts);
         model.addAttribute("avgScorePercent", avgScorePercent);
         model.addAttribute("userEmail", userEmail);
+        model.addAttribute("userInitials", userCtx.initials());
 
         return "profile";
     }
@@ -368,29 +404,49 @@ public class DashBoardController {
     @PostMapping("/quiz/new")
     public String createQuiz(@RequestParam String subject,
                              @RequestParam String category,
-                             @RequestParam String question,
-                             @RequestParam String option1,
-                             @RequestParam String option2,
-                             @RequestParam String option3,
-                             @RequestParam String option4,
-                             @RequestParam int correctOption,
+                             @RequestParam List<String> questionTexts,
+                             @RequestParam List<String> option1s,
+                             @RequestParam List<String> option2s,
+                             @RequestParam List<String> option3s,
+                             @RequestParam List<String> option4s,
+                             @RequestParam List<Integer> correctOptions,
                              @RequestParam(name = "userEmail", required = false) String userEmailParam,
                              HttpSession session) {
 
         String userEmail = resolveUserEmail(session, userEmailParam);
 
-        int correctIndex = Math.max(0, Math.min(3, correctOption - 1));
+        String safeCategory = category == null || category.isBlank() ? "Other" : category.trim();
+        String trimmedSubject = subject == null ? "" : subject.trim();
+        int count = Math.min(questionTexts.size(),
+                Math.min(Math.min(option1s.size(), option2s.size()),
+                        Math.min(option3s.size(), Math.min(option4s.size(), correctOptions.size()))));
 
-        QuizQuestionEntity entity = new QuizQuestionEntity(
-                subject,
-                category.isBlank() ? "Other" : category,
-                question,
-                option1, option2, option3, option4,
-                correctIndex
-        );
+        for (int i = 0; i < count; i++) {
+            String question = questionTexts.get(i);
+            if (question == null || question.isBlank()) continue;
 
-        questionRepo.save(entity);
+            int correctIndex = Math.max(0, Math.min(3, correctOptions.get(i) - 1));
 
-        return "redirect:/quiz/" + subject + "?userEmail=" + userEmail;
+            QuizQuestionEntity entity = new QuizQuestionEntity(
+                    trimmedSubject,
+                    safeCategory,
+                    question.trim(),
+                    option1s.get(i).trim(),
+                    option2s.get(i).trim(),
+                    option3s.get(i).trim(),
+                    option4s.get(i).trim(),
+                    correctIndex
+            );
+
+            questionRepo.save(entity);
+        }
+
+        return "redirect:/quiz/" + trimmedSubject + "?userEmail=" + userEmail;
+    }
+
+    @PostMapping("/signout")
+    public String signOut(HttpSession session) {
+        session.invalidate();
+        return "redirect:http://localhost:3000/auth";
     }
 }

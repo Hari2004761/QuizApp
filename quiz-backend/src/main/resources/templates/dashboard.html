@@ -11,19 +11,16 @@
     <!-- Top bar -->
     <header class="top-bar">
         <div class="top-left">
-            <div class="logo-icon">📚</div>
             <div class="welcome">
                 <div class="welcome-title">
-                    Welcome back, <span th:text="${userName}">Hari</span>!
+                    Welcome back, <span th:text="${fullName}">Hari Narayanan</span>!
                 </div>
             </div>
         </div>
         <div class="top-right">
-            <div class="icon-btn">✉️</div>
-            <div class="icon-btn">🔔</div>
             <div class="profile">
                 <div class="profile-name" th:text="${fullName}">Hari Narayanan</div>
-                <a th:href="@{'/profile?userEmail=' + ${userEmail}}" class="profile-avatar">🐱</a>
+                <a th:href="@{'/profile?userEmail=' + ${userEmail}}" class="profile-avatar" th:text="${userInitials}">HN</a>
             </div>
         </div>
     </header>
@@ -153,7 +150,7 @@
                 <h2>Your Progress</h2>
 
                 <div class="progress-circle"
-                     th:style="'background: conic-gradient(#ffda23 0deg ' + ${progressDegrees} + 'deg, rgba(255,255,255,0.14) ' + ${progressDegrees} + 'deg 360deg);'">
+                     th:style="'background: conic-gradient(#2563eb 0deg ' + ${progressDegrees} + 'deg, rgba(255,255,255,0.14) ' + ${progressDegrees} + 'deg 360deg);'">
                     <div class="progress-inner">
                         <span th:text="${overallProgress} + '%'">34%</span>
                     </div>

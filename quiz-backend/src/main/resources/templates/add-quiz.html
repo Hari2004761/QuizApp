@@ -10,8 +10,7 @@
 
   <header class="top-bar">
     <div class="top-left">
-      <div class="logo-icon">📚</div>
-      <div class="welcome-title">Create a Quiz Question</div>
+      <div class="welcome-title">Create New Quiz</div>
     </div>
     <div class="top-right">
       <a th:href="@{'/?userEmail=' + ${userEmail}}" class="btn-secondary">Back to Dashboard</a>
@@ -21,8 +20,7 @@
   <main class="content" style="grid-template-columns: minmax(0, 1fr);">
     <section class="section-block">
       <div class="subject-card">
-        <form th:action="@{'/quiz/new?userEmail=' + ${userEmail}}" method="post" class="quiz-form">
-          <input type="hidden" name="userEmail" th:value="${userEmail}" />
+        <form th:action="@{'/quiz/new?userEmail=' + ${userEmail}}" method="post" class="quiz-form" id="quizBuilder">
           <div class="form-group">
             <label>Subject (quiz name)</label>
             <input type="text" name="subject" list="subject-list"
@@ -41,29 +39,63 @@
             </datalist>
           </div>
 
-          <div class="form-group">
-            <label>Question</label>
-            <textarea name="question" rows="3" placeholder="Type your question here" required></textarea>
+          <div id="questions-container">
+            <div class="question-block">
+              <div class="form-group">
+                <label>Question 1</label>
+                <textarea name="questionTexts" rows="3" placeholder="Type your question here" required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Options</label>
+                <input type="text" name="option1s" placeholder="Option 1" required>
+                <input type="text" name="option2s" placeholder="Option 2" required>
+                <input type="text" name="option3s" placeholder="Option 3" required>
+                <input type="text" name="option4s" placeholder="Option 4" required>
+              </div>
+
+              <div class="form-group">
+                <label>Correct option (1-4)</label>
+                <input type="number" name="correctOptions" min="1" max="4" value="1" required>
+              </div>
+              <hr>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>Options</label>
-            <input type="text" name="option1" placeholder="Option 1" required>
-            <input type="text" name="option2" placeholder="Option 2" required>
-            <input type="text" name="option3" placeholder="Option 3" required>
-            <input type="text" name="option4" placeholder="Option 4" required>
-          </div>
-
-          <div class="form-group">
-            <label>Correct option (1–4)</label>
-            <input type="number" name="correctOption" min="1" max="4" value="1" required>
-          </div>
-
-          <button type="submit" class="btn-primary">Save and start quiz</button>
+          <button type="button" class="btn-secondary" id="addQuestionBtn">+ Add another question</button>
+          <button type="submit" class="btn-primary">Save quiz</button>
         </form>
       </div>
     </section>
   </main>
 </div>
+
+<script>
+  (function () {
+    const container = document.getElementById('questions-container');
+    const addBtn = document.getElementById('addQuestionBtn');
+
+    function updateLabels() {
+      const blocks = container.querySelectorAll('.question-block');
+      blocks.forEach((block, idx) => {
+        const label = block.querySelector('label');
+        if (label) label.textContent = `Question ${idx + 1}`;
+      });
+    }
+
+    function addQuestion() {
+      const first = container.querySelector('.question-block');
+      const clone = first.cloneNode(true);
+      clone.querySelectorAll('textarea, input').forEach((el) => {
+        el.value = '';
+      });
+      container.appendChild(clone);
+      updateLabels();
+    }
+
+    addBtn.addEventListener('click', addQuestion);
+    updateLabels();
+  })();
+</script>
 </body>
 </html>

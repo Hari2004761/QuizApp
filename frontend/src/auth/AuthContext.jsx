@@ -1,20 +1,9 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
-        const stored = localStorage.getItem('quizapp:user');
-        return stored ? JSON.parse(stored) : null;
-    });
-
-    useEffect(() => {
-        if (user) {
-            localStorage.setItem('quizapp:user', JSON.stringify(user));
-        } else {
-            localStorage.removeItem('quizapp:user');
-        }
-    }, [user]);
+    const [user, setUser] = useState(null);
 
     const value = useMemo(() => ({
         user,

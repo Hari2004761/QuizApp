@@ -10,11 +10,12 @@
 
     <header class="top-bar">
         <div class="top-left">
-            <div class="logo-icon">📚</div>
             <div class="welcome-title">Profile</div>
         </div>
         <div class="top-right">
-            <!-- FIX: correct mapping -->
+            <form th:action="@{/signout}" method="post" style="display:inline">
+                <button type="submit" class="btn-secondary">Sign out</button>
+            </form>
             <a th:href="@{'/?userEmail=' + ${userEmail}}" class="btn-primary">Back to Dashboard</a>
         </div>
     </header>
@@ -23,8 +24,21 @@
         <section class="section-block">
             <div class="profile-card">
                 <h2 th:text="${fullName}">Hari Narayanan</h2>
-                <p class="profile-username" th:text="'@' + ${username}">@hari_n</p>
-                <p class="profile-email" th:text="${email}">hari@example.com</p>
+
+                <div class="profile-extra">
+                    <div>
+                        <span class="label">Name:</span>
+                        <span th:text="${fullName}">Hari Narayanan</span>
+                    </div>
+                    <div>
+                        <span class="label">Email:</span>
+                        <span th:text="${email}">hari@example.com</span>
+                    </div>
+                    <div>
+                        <span class="label">Username:</span>
+                        <span th:text="${username}">@hari_n</span>
+                    </div>
+                </div>
 
                 <div class="profile-extra">
                     <div>
