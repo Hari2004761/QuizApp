@@ -3,9 +3,14 @@ import Select from 'react-select';
 import { getData } from 'country-list';
 import axios from 'axios';
 
+const normalizeCountryName = (name) => name
+    .replace(/\s*\(the\)/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
 const countries = getData().map(country => ({
     value: country.code,
-    label: country.name
+    label: normalizeCountryName(country.name)
 }));
 
 const SignupForm = () => {

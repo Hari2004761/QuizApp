@@ -110,9 +110,39 @@ public class DataInitializer implements CommandLineRunner {
                         "USA and USSR", "France and Germany", "China and Japan", "UK and India", 0)
         );
 
+        // Data Structures & Algorithms (Computer Science)
+        List<QuizQuestionEntity> dsaQuestions = List.of(
+                new QuizQuestionEntity(
+                        "Data Structures & Algorithms", "Computer Science",
+                        "Which data structure follows First-In First-Out (FIFO) ordering?",
+                        "Stack", "Queue", "Tree", "Graph", 1),
+                new QuizQuestionEntity(
+                        "Data Structures & Algorithms", "Computer Science",
+                        "What is the average time complexity of quicksort?",
+                        "O(n^2)", "O(n log n)", "O(log n)", "O(n)", 1),
+                new QuizQuestionEntity(
+                        "Data Structures & Algorithms", "Computer Science",
+                        "Which traversal visits a binary tree in left-root-right order?",
+                        "Pre-order", "Post-order", "In-order", "Level-order", 2),
+                new QuizQuestionEntity(
+                        "Data Structures & Algorithms", "Computer Science",
+                        "Which data structure pairing is commonly used for an LRU cache?",
+                        "Array only", "Queue and stack", "Hash map and doubly linked list", "Binary search tree", 2),
+                new QuizQuestionEntity(
+                        "Data Structures & Algorithms", "Computer Science",
+                        "In a binary search tree (BST), which statement is true?",
+                        "Left children are greater than the root", "Right children are smaller than the root",
+                        "Left subtree keys are smaller and right subtree keys are larger", "All nodes have two children", 2),
+                new QuizQuestionEntity(
+                        "Data Structures & Algorithms", "Computer Science",
+                        "Which algorithm finds the single-source shortest path with non-negative edge weights?",
+                        "Prim's algorithm", "Dijkstra's algorithm", "Depth-first search", "Floyd-Warshall with negatives", 1)
+        );
+
         devQuestions.forEach(this::saveIfMissing);
         econQuestions.forEach(this::saveIfMissing);
         historyQuestions.forEach(this::saveIfMissing);
+        dsaQuestions.forEach(this::saveIfMissing);
     }
 
     private void saveIfMissing(QuizQuestionEntity entity) {
