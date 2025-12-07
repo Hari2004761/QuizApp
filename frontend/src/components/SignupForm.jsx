@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import Select from 'react-select';
 import { getData } from 'country-list';
 import axios from 'axios';
@@ -15,10 +15,11 @@ const countries = getData().map(country => ({
 
 const SignupForm = () => {
     const [selectedCountry, setSelectedCountry] = useState(null);
-    const [message, setMessage] = useState('');
+    const [feedback, setFeedback] = useState({ type: '', text: '' });
 
     const handleSignup = async (e) => {
         e.preventDefault();
+        setFeedback({ type: '', text: '' });
         const formData = new FormData(e.target);
         const user = {
             username: formData.get('username'),
@@ -31,28 +32,33 @@ const SignupForm = () => {
         };
 
         if (!selectedCountry) {
-            setMessage('❌ Please select your country!');
+            setFeedback({ type: 'error', text: 'Please select your country.' });
             return;
         }
 
         if (user.password !== user.confirmPassword) {
-            setMessage('❌ Passwords do not match!');
+            setFeedback({ type: 'error', text: 'Passwords do not match.' });
             return;
         }
 
         try {
             const res = await axios.post('http://localhost:8080/api/auth/signup', user);
-            setMessage(res.data);
-            e.target.reset();
-            setSelectedCountry(null);
+            const { status, message } = res.data;
+            const type = status === 'success' ? 'success' : 'error';
+            setFeedback({ type, text: message || 'Signup completed.' });
+            if (type === 'success') {
+                e.target.reset();
+                setSelectedCountry(null);
+            }
         } catch (err) {
-            setMessage('Signup failed. Try again.');
+            const serverMessage = err.response?.data?.message || 'Signup failed. Try again.';
+            setFeedback({ type: 'error', text: serverMessage });
         }
     };
 
     return (
         <div className="form-container">
-            <h2 className="form-title">Join Learn & Quiz</h2>
+            <h2 className="form-title">Join Learn &amp; Quiz</h2>
             <form className="form" onSubmit={handleSignup}>
                 <input type="text" name="firstName" placeholder="First Name" className="form-input" required />
                 <input type="text" name="lastName" placeholder="Last Name" className="form-input" required />
@@ -72,9 +78,9 @@ const SignupForm = () => {
                 <button type="submit" className="primary-button">Sign Up</button>
             </form>
 
-            {message && (
-                <p className={`message ${message.startsWith('✅') ? 'success' : 'error'}`}>
-                    {message}
+            {feedback.text && (
+                <p className={`message ${feedback.type === 'success' ? 'success' : 'error'}`}>
+                    {feedback.text}
                 </p>
             )}
         </div>

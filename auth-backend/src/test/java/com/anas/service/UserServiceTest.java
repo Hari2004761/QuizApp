@@ -40,10 +40,11 @@ public class UserServiceTest {
         when(userRepository.findByUsername(newUser.getUsername())).thenReturn(Optional.empty());
 
         // 2. Execute
-        String result = userService.registerUser(newUser);
+        Map<String, String> result = userService.registerUser(newUser);
 
         // 3. Verify
-        assertEquals("✅ User registered successfully!", result);
+        assertEquals("success", result.get("status"));
+        assertEquals("User registered successfully.", result.get("message"));
         verify(userRepository, times(1)).save(any(User.class)); // Make sure save was called
     }
 
@@ -55,9 +56,10 @@ public class UserServiceTest {
         // Simulate that email already exists in DB
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
-        String result = userService.registerUser(user);
+        Map<String, String> result = userService.registerUser(user);
 
-        assertEquals("Email already exists", result);
+        assertEquals("error", result.get("status"));
+        assertEquals("Email already exists.", result.get("message"));
         verify(userRepository, never()).save(any(User.class)); // Ensure we NEVER saved
     }
 
@@ -72,9 +74,10 @@ public class UserServiceTest {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
 
-        String result = userService.registerUser(user);
+        Map<String, String> result = userService.registerUser(user);
 
-        assertEquals("❌ Passwords do not match!", result);
+        assertEquals("error", result.get("status"));
+        assertEquals("Passwords do not match.", result.get("message"));
     }
 
     // --- TEST LOGIN ---
@@ -94,7 +97,7 @@ public class UserServiceTest {
         Map<String, String> response = userService.loginUser(email, password);
 
         assertEquals("success", response.get("status"));
-        assertEquals("✅ Login successful!", response.get("message"));
+        assertEquals("Login successful.", response.get("message"));
     }
 
     @Test
@@ -107,7 +110,7 @@ public class UserServiceTest {
         Map<String, String> response = userService.loginUser(email, "anyPass");
 
         assertEquals("error", response.get("status"));
-        assertEquals("❌ User not found!", response.get("message"));
+        assertEquals("User not found.", response.get("message"));
     }
 
     @Test
@@ -126,6 +129,6 @@ public class UserServiceTest {
         Map<String, String> response = userService.loginUser(email, wrongPass);
 
         assertEquals("error", response.get("status"));
-        assertEquals("❌ Incorrect password!", response.get("message"));
+        assertEquals("Incorrect password.", response.get("message"));
     }
 }

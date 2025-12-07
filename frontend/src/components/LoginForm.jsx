@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../auth/AuthContext';
 
 const LoginForm = () => {
-    const [message, setMessage] = useState('');
+    const [feedback, setFeedback] = useState({ type: '', text: '' });
     const navigate = useNavigate();
     const location = useLocation();
     const { login } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setFeedback({ type: '', text: '' });
         const formData = new FormData(e.target);
         const email = formData.get('email').trim().toLowerCase();
         const password = formData.get('password');
@@ -22,8 +23,13 @@ const LoginForm = () => {
             });
 
             const { status, message: serverMessage, firstName, lastName, username, country } = res.data;
-            setMessage(serverMessage);
-            if (status === 'success') {
+            const type = status === 'success' ? 'success' : 'error';
+            setFeedback({
+                type,
+                text: serverMessage || (type === 'success' ? 'Logged in successfully.' : 'Login failed. Try again.')
+            });
+
+            if (type === 'success') {
                 login({
                     email,
                     firstName,
@@ -37,7 +43,8 @@ const LoginForm = () => {
             }
         } catch (err) {
             console.error(err);
-            setMessage('❌ Login failed. Try again.');
+            const serverMessage = err.response?.data?.message || 'Login failed. Try again.';
+            setFeedback({ type: 'error', text: serverMessage });
         }
     };
 
@@ -56,9 +63,9 @@ const LoginForm = () => {
                 </div>
                 <button type="submit" className="primary-button">Sign In</button>
             </form>
-            {message && (
-                <p className={`message ${message.includes('❌') ? 'error' : 'success'}`}>
-                    {message}
+            {feedback.text && (
+                <p className={`message ${feedback.type === 'success' ? 'success' : 'error'}`}>
+                    {feedback.text}
                 </p>
             )}
         </div>

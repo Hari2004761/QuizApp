@@ -11,7 +11,8 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = {
         "http://localhost:3000",
-        "http://localhost:3001"
+        "http://localhost:3001",
+        "http://localhost:3004"
 })
 public class AuthController {
 
@@ -19,7 +20,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/signup")
-    public String signup(@RequestBody User user) {
+    public Map<String, String> signup(@RequestBody User user) {
         return userService.registerUser(user);
     }
 
