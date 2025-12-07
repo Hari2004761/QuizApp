@@ -9,9 +9,6 @@ HELP.md
 .mvn/wrapper/maven-wrapper.jar
 
 ############################
-# Spring Boot config
-############################
-**/src/main/resources/application.properties
 
 ############################
 # IntelliJ IDEA
